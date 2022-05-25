@@ -22,7 +22,8 @@ public class SteeredCohesion : FilteredFlockBehavior
 
             cohesionMove -= (Vector2)agent.transform.position;
             if (float.IsNaN(currentVel.x) || float.IsNaN(currentVel.y)) currentVel = Vector2.zero;
-            cohesionMove = Vector2.SmoothDamp(agent.transform.up,cohesionMove, ref currentVel,agentSmoothTime);
+            cohesionMove = Vector2.SmoothDamp(agent.transform.up,cohesionMove, ref currentVel,agentSmoothTime); // this gets rid of jitteryness by smoothing the transition between
+                                                                                                                                    //cohesion vectors
             return cohesionMove;
         }
     }
