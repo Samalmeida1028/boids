@@ -25,6 +25,7 @@ public class Flock : MonoBehaviour
     [Range(1,1000)]
     public int updateNeighbors;
     int count = 1;
+     quad quadtre;
 
     float squareMaxSpeed;
     float squareNeighborRadius;
@@ -42,47 +43,58 @@ public class Flock : MonoBehaviour
             newagent.name= "Agent " + i;
             agents.Add(newagent);
         }
+        quadtre = new quad(-200,-200,400,400,agentPrefab.gameObject,0);
     }
 
     void FixedUpdate()
     {
+        quadtre.clear();
         maxNeighbors = maxNeighbors;
         maximumSpeed = maximumSpeed;
         neighbourRadius = neighbourRadius;
         avoidRangeMult = avoidRangeMult;
         driveFactor = driveFactor;
         count++;
-        if(count>=updateNeighbors){
         foreach(FlockAgent agent in agents){
-            List<Transform> context = GetNearbyObjects(agent);
             //agent.GetComponentInChildren<SpriteRenderer>().color= Color.Lerp(Color.white,Color.red,context.Count/maxNeighbors);
-            Vector2 move = behavior.calculateMove(agent,context,this);
+            quadtre.insert(agent.gameObject);
+        }
+        
+        foreach(FlockAgent agent in agents){
+        List<GameObject> contextT = new List<GameObject>();
+        List<GameObject> context = quadtre.retrieveObjects(contextT,agent.gameObject);
+        List<Transform> conTran = new List<Transform>();
+        foreach(GameObject game in context){
+            if(game != agent.gameObject){
+                conTran.Add(game.transform);
+            }
+        }
+        Vector2 move = behavior.calculateMove(agent,conTran,this);
             move *= driveFactor;
             if(move.sqrMagnitude>squareMaxSpeed){
                 move = move.normalized*maximumSpeed;
             }
             agent.Move(move);
-            count = 0;  
+            count = 0; 
+
         }
+
         }
-        else{
-            foreach(FlockAgent agent in agents){
-                agent.Move(agent.transform.up*driveFactor);
-            }
-                
-            }
 
 
     }
 
-    List<Transform> GetNearbyObjects(FlockAgent agent){
-        List<Transform> context = new List<Transform>();
-        Collider2D[] contextColliders = Physics2D.OverlapCircleAll(agent.transform.position,neighbourRadius);
-        foreach(Collider2D collider in contextColliders){
-            if(collider != agent.AgentCollider&&context.Count<maxNeighbors){
-                context.Add(collider.transform);
-            }
-        }
-        return context;
-    }
-}
+    // List<Transform> GetNearbyObjects(FlockAgent agent){
+    //     List<Transform> context = new List<Transform>();
+    //     List<GameObject> contextG = new List<GameObject>();
+    //     List<GameObject> contextT = new List<GameObject>();
+
+    //     contextG = quad.retrieveObjects(contextT,agent.gameObject);
+
+    //     foreach(GameObject col in contextG){
+    //         if(col != agent.gameObject){
+    //             context.Add(col.transform);
+    //         }
+    //     }
+    //     return context;
+    // }
