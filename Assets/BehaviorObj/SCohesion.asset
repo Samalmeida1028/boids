@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SCohesion
   m_EditorClassIdentifier: 
   filter: {fileID: 11400000, guid: e5e9b6a22902eb94fac86563dd8c7480, type: 2}
-  agentSmoothTime: 10
+  agentSmoothTime: 4

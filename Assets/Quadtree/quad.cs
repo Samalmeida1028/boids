@@ -13,8 +13,8 @@ public class quad
         private float selfHeight;
         public float Height {get{return selfHeight;}}
 
-        private int MAXPOINTS = 7;
-        private int DEPTH = 8;
+        private int MAXPOINTS = 2;
+        private int DEPTH = 9;
 
         private quad[] nodes;
         public quad[] Nodes {get{return nodes;}}
